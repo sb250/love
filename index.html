@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>当然爱啦</title>
+  <style>
+    body, html {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      overflow: hidden;
+      font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,SimSun,sans-serif;
+      font-weight: 300;
+      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .container {
+      display: block;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .item {
+      display: inline-block;
+      padding: 12px;
+      border-radius: 2px;
+      position: absolute;
+      line-height: 1;
+      font-size: 12px;
+      max-width: 100px;
+    }
+
+    #first {
+      position: absolute;
+      top: -100px;
+      left: -100px;
+    }
+
+    #stop {
+      position: absolute;
+      left: 50%;
+      bottom: 10%;
+    }
+
+    .stop-inner {
+      display: inline-block;
+      position: relative;
+      left: -50%;
+      background: #494747;
+      color: #fff;
+      padding: 8px 11.98px;
+      border-radius: 5px;
+      font-weight: bold;
+      z-index: 1;
+      cursor: pointer;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+  </style>
+  <body>
+    <div id="app" class="container">
+      <div id="first" class="item"></div>
+      <div id="stop">
+        <div class="stop-inner">
+          够了(｡・`ω´・) 停！
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/randomcolor/0.5.4/randomColor.js"></script>
+  <script src="./saohua.js"></script>
+  <script>
+    var app = $('#app');
+    var stop = $('#stop');
+    var first = $('#first');
+
+    var appH = app.innerHeight()
+    var appW = app.innerWidth()
+
+    var itemWidth = 80;
+    var itemHeight = 0;
+
+    var unit = 'px'
+  
+    function play () {
+      var top = Math.floor(Math.random() * appH);
+      var left = Math.floor(Math.random() * appW);
+      var huaIndex = Math.floor(Math.random() * saohua.length);
+
+      first.html(saohua[huaIndex])
+      itemWidth = first.innerWidth()
+      itemHeight = first.innerHeight()
+
+      if (itemWidth === 0 && itemHeight === 0) {
+        top = 50
+        left = 50
+        unit = '%'
+      } else {
+        unit = 'px'
+      }
+
+      if (top > itemHeight) {
+        top = top - itemHeight
+      }
+
+      if (left > itemWidth) {
+        left = left - itemWidth
+      }
+  
+      var color = "#000"
+  
+      var bgcolor = randomColor({
+        luminosity: 'bright',
+        format: 'rgba',
+        alpha: 0.5,
+      });
+  
+      var positionTop = 'top: ' + top + unit + ';';
+      var postionLeft = 'left: ' + left + unit + ';';
+      var colorStyle = 'background-color: ' + bgcolor + '; color: ' + color + ';'
+  
+      var item = $("<div/>", {
+        class: 'item',
+        title: 'test',
+        style: colorStyle + positionTop + postionLeft,
+      })
+  
+      item.html(saohua[huaIndex])
+      
+      item.appendTo(app)
+
+      // app.css('background-color', bgcolor)
+    }
+
+    var light = true;
+    var intervalId = setInterval(play, 500);
+
+    stop.on('click', function () {
+      if (!light) {
+        intervalId = setInterval(play, 500);
+        $(this).find('.stop-inner').html("够了(｡・`ω´・) 停！")
+      } else {
+        clearInterval(intervalId)
+        $(this).find('.stop-inner').html("╰(*°▽°*)╯ 继续..")
+      }
+      light = !light
+    })
+
+  </script>
+</html>
